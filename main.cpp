@@ -1,53 +1,78 @@
-#include<iostream>
-#include<string>
+#include <iostream>
 using namespace std;
 
-struct Student{
-    int id;
-    int creditCompleted;
-    int semesterCompleted;
-    double cgpa;
+struct BankAccount {
+  int account_number;
+  string account_holder_name;
+  double account_balance;
 };
 
-int main()
-{
-    Student s[15];
-    for(int i=0;i<15;i++)
-    {   cout<<"Enter students information :"<<i+1<<endl;
+void create_account(BankAccount &account) {
+  cout << "Enter the account number: ";
+  cin >> account.account_number;
+  cout << "Enter the account holder's name: ";
+  cin >> account.account_holder_name;
+  cout << "Enter the initial account balance: ";
+  cin >> account.account_balance;
+}
 
-        cout<<"Unique ID :"<<endl;
-        cin>>s[i].id;
+void deposit_money(BankAccount &account, double amount) {
+  account.account_balance += amount;
+  cout << "Deposit successful and New balance is " << account.account_balance << endl;
+}
 
-        cout<<"Credit completed :"<<endl;
-        cin>>s[i].creditCompleted;
+bool withdraw_money(BankAccount &account, double amount) {
+  if (amount > account.account_balance) {
+    cout << "Insufficient funds and Withdrawal failed." << endl;
+    return false;
+  }
+  account.account_balance -= amount;
+  cout << "Withdrawal successful and New balance is " << account.account_balance << endl;
+  return true;
+}
 
-        cout<<"Semester completed :"<<endl;
-        cin>>s[i].semesterCompleted;
+void display_account(BankAccount &account) {
+  cout << "Account number: " << account.account_number << endl;
+  cout << "Account holder's name: " << account.account_holder_name << endl;
+  cout << "Account balance: " << account.account_balance << endl;
+}
 
-        cout<<"CGPA :"<<endl;
-        cin>>s[i].cgpa;
+int main() {
+  BankAccount my_account;
+  create_account(my_account);
+
+  int choice;
+  double amount;
+
+  while (true) {
+    cout << "Menu:"<<endl;
+    cout<<"1 Deposit money "<<endl;
+    cout<<"2 Withdraw money "<<endl;
+    cout<<"3 Display account details "<<endl;
+    cout<<"4 Exit"<<endl;
+    cout<<"Enter your choice: ";
+    cin >> choice;
+
+    if (choice == 1) {
+      cout << "Enter the amount to deposit: ";
+      cin >> amount;
+      deposit_money(my_account, amount);
+    } else if (choice == 2) {
+      cout << "Enter the amount to withdraw: ";
+      cin >> amount;
+      if (withdraw_money(my_account, amount)) {
+
+        display_account(my_account);
+      }
+    } else if (choice == 3) {
+      display_account(my_account);
+    } else if (choice == 4) {
+      cout << "Thank you" << endl;
+      break;
+    } else {
+      cout << "Invalid choice Please try again" << endl;
     }
-    cout<<"Student information who have cgpa more than 3.75 :"<<endl;
-    for(int i=0;i<15;i++)
-    {
-        if(s[i].cgpa>=3.75)
-        {
-            cout<<s[i].id<<endl;
-        }
-    }
-    cout<<"Student information who completed more than 50 credit :"<<endl;
-    for(int i=0;i<15;i++)
-    {
-        if(s[i].creditCompleted>=50)
-        {
-            cout<<s[i].id<<endl;
-        }
-    }
-    cout << "Students with at least 2 semesters and 28 credits:" << endl;
-    for (int i = 0; i < 15; i++) {
-        if (s[i].semesterCompleted >= 2 && s[i].creditCompleted >= 28) {
-            cout << "Student ID: " << s[i].id << endl;
-        }
-    }
-    return 0;
+  }
+
+  return 0;
 }
